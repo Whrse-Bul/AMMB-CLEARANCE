@@ -422,7 +422,10 @@
     </div>
   </div>
 
+  
   <script>
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzLO4rlUSum8B3FRnvhOTRvizuDEUqVcShIZFH8TgObCHVobp2NNX0rOOeVeg_Bl8QsQw/exec';
+
     // ---- Element refs ----
     const input = document.getElementById('searchInput');
     const statusLine = document.getElementById('statusLine');
@@ -502,19 +505,18 @@
 
     function runSearch(value) {
       const mySeq = ++requestSeq;
-      google.script.run
-        .withSuccessHandler(function (results) {
-          if (mySeq !== requestSeq) return; // stale response, ignore
-          renderResults(results, value);
+      fetch(`${GAS_URL}?action=search&q=${encodeURIComponent(value)}`)
+        .then(r=>r.json())
+        .then(results=>{
+          if(mySeq!==requestSeq) return;
+          renderResults(results,value);
         })
-        .withFailureHandler(function (err) {
-          if (mySeq !== requestSeq) return;
-          statusLine.textContent = 'Error: ' + err.message;
-          resultsWrap.innerHTML = '<div class="empty-state">Something went wrong. Try again.</div>';
+        .catch(err=>{
+          statusLine.textContent='Error: '+err.message;
+          resultsWrap.innerHTML='<div class="empty-state">Something went wrong. Try again.</div>';
           copyBtn.classList.remove('visible');
           dispatchBtn.classList.remove('visible');
-        })
-        .searchBoxTracking(value);
+        });
     }
 
     function badgeClass(source) {
