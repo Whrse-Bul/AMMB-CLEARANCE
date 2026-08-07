@@ -836,29 +836,32 @@
       dateHint.textContent = '';
       modalOverlay.classList.add('visible');
 
+      fStore.value = DEFAULT_STORE;
+      fPickedBy.value = '';
+      fDrTracking.value = '';
+      fDispatchDate.value = '';
+
+      // Picked By: always the current user's Gmail (per-user, not remembered from device storage)
+      fetch(`${GAS_URL}?action=getEmail`)
+        .then(r => r.json())
+        .then(function (data) {
+          if (data && data.email) fPickedBy.value = data.email;
+        })
+        .catch(function () {});
+
+      // DR Tracking No. / Dispatch Date: use what was saved on this device from
+      // your last submit, if available. Otherwise, look it up from the sheet
+      // for the (fixed) store.
       const last = loadLastEntry();
-      if (last) {
-        // Remembered from your last submit on this device — no lookup needed
-        fStore.value = last.store || DEFAULT_STORE;
-        fPickedBy.value = last.pickedBy || '';
-        fDrTracking.value = last.drTrackingNo || '';
-        fDispatchDate.value = last.dispatchDate || '';
-        drHint.textContent = 'From your last entry';
-        dateHint.textContent = 'From your last entry';
-      } else {
-        fStore.value = DEFAULT_STORE;
-        fPickedBy.value = '';
-        fDrTracking.value = '';
-        fDispatchDate.value = '';
-
-        // First time on this device — prefill Gmail + look up last DR/date for the default store
-        google.script.run
-          .withSuccessHandler(function (email) {
-            if (email && !fPickedBy.value) fPickedBy.value = email;
-          })
-          .withFailureHandler(function () {})
-          .getActiveUserEmail();
-
+      if (last && last.drTrackingNo) {
+        fDrTracking.value = last.drTrackingNo;
+        drHint.textContent = 'From your last submit';
+      }
+      if (last && last.dispatchDate) {
+        fDispatchDate.value = last.dispatchDate;
+        dateHint.textContent = 'From your last submit';
+      }
+      if (!last || !last.drTrackingNo || !last.dispatchDate) {
         loadStoreSuggestions(DEFAULT_STORE);
       }
     }
@@ -867,59 +870,35 @@
       modalOverlay.classList.remove('visible');
     }
 
-    // ---- Live auto-save: Picked By / DR Tracking No. / Dispatch Date ----
-    // Saves as the user types (debounced), so these fields are remembered
-    // on this device even if the form is closed without submitting.
-    let fieldSaveTimer = null;
-    function autoSaveFields() {
-      clearTimeout(fieldSaveTimer);
-      fieldSaveTimer = setTimeout(function () {
-        const existing = loadLastEntry() || {};
-        saveLastEntry({
-          store: existing.store || DEFAULT_STORE,
-          pickedBy: fPickedBy.value,
-          drTrackingNo: fDrTracking.value,
-          dispatchDate: fDispatchDate.value
-        });
-      }, 300);
-    }
-    fPickedBy.addEventListener('input', autoSaveFields);
-    fDrTracking.addEventListener('input', autoSaveFields);
-    fDispatchDate.addEventListener('input', autoSaveFields);
-
-    fStore.addEventListener('input', function () {
-      clearTimeout(storeSuggestTimer);
-      storeSuggestTimer = setTimeout(function () {
-        loadStoreSuggestions(fStore.value.trim());
-      }, 400);
-    });
-
     function loadStoreSuggestions(store) {
       if (!store) return;
-      drHint.textContent = 'Looking up last DR for this store...';
-      dateHint.textContent = '';
+      if (!fDrTracking.value) drHint.textContent = 'Looking up last DR for this store...';
 
-      google.script.run
-        .withSuccessHandler(function (info) {
+      fetch(`${GAS_URL}?action=getLastInfo&store=${encodeURIComponent(store)}`)
+        .then(r => r.json())
+        .then(function (info) {
           if (fStore.value.trim() !== store) return; // store changed again while waiting
-          if (info && info.drTrackingNo) {
-            fDrTracking.value = info.drTrackingNo;
-            drHint.textContent = 'Last used for ' + store;
-          } else {
-            drHint.textContent = 'No previous DR found for this store — enter manually.';
+          if (!fDrTracking.value) {
+            if (info && info.drTrackingNo) {
+              fDrTracking.value = info.drTrackingNo;
+              drHint.textContent = 'Last used for ' + store;
+            } else {
+              drHint.textContent = 'No previous DR found for this store — enter manually.';
+            }
           }
-          if (info && info.dispatchDate) {
-            fDispatchDate.value = info.dispatchDate;
-            dateHint.textContent = 'Last dispatch date for ' + store;
-          } else {
-            dateHint.textContent = '';
+          if (!fDispatchDate.value) {
+            if (info && info.dispatchDate) {
+              fDispatchDate.value = info.dispatchDate;
+              dateHint.textContent = 'Last dispatch date for ' + store;
+            } else {
+              dateHint.textContent = '';
+            }
           }
         })
-        .withFailureHandler(function () {
+        .catch(function () {
           drHint.textContent = '';
           dateHint.textContent = '';
-        })
-        .getLastFulfillmentInfo(store);
+        });
     }
 
     modalSubmitBtn.addEventListener('click', function () {
@@ -950,25 +929,35 @@
       modalSubmitBtn.disabled = true;
       modalSubmitBtn.textContent = 'Submitting...';
 
-      google.script.run
-        .withSuccessHandler(function (result) {
+      fetch(GAS_URL, {
+        method: 'POST',
+        // text/plain avoids a CORS preflight (Apps Script doesn't handle OPTIONS).
+        // The body itself is still well-formed JSON; doPost() parses it as such.
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'submitFulfillment',
+          payload: {
+            pickedBy: pickedBy,
+            drTrackingNo: drTrackingNo,
+            dispatchDate: dispatchDate,
+            store: store,
+            items: items
+          }
+        })
+      })
+        .then(r => r.json())
+        .then(function (result) {
+          if (result && result.error) throw new Error(result.error);
           saveLastEntry({ store: store, pickedBy: pickedBy, drTrackingNo: drTrackingNo, dispatchDate: dispatchDate });
           modalFormView.style.display = 'none';
           modalSuccessView.style.display = 'block';
           modalSuccessMsg.textContent = result.count + ' item' + (result.count === 1 ? '' : 's') + ' sent to FULFILLMENT.';
         })
-        .withFailureHandler(function (err) {
+        .catch(function (err) {
           modalSubmitBtn.disabled = false;
           modalSubmitBtn.textContent = 'Submit';
           modalError.textContent = 'Error: ' + err.message;
           modalError.classList.add('visible');
-        })
-        .submitFulfillment({
-          pickedBy: pickedBy,
-          drTrackingNo: drTrackingNo,
-          dispatchDate: dispatchDate,
-          store: store,
-          items: items
         });
     });
 
