@@ -3,6 +3,7 @@
 <head>
   <base target="_top">
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <style>
     :root {
       --cream: #FBF6EE;
@@ -231,7 +232,7 @@
       background: var(--white);
       border-radius: 12px;
       width: 100%;
-      max-width: 420px;
+      max-width: 560px;
       padding: 18px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       text-align: center;
@@ -241,10 +242,11 @@
       width: 100%;
       border-radius: 8px;
       background: #000;
-      max-height: 320px;
+      height: 60vh;
+      max-height: 480px;
       object-fit: cover;
     }
-    .scan-status { font-size: 13px; color: var(--muted); margin: 10px 0 14px; min-height: 17px; }
+    .scan-status { font-size: 14px; color: var(--muted); margin: 10px 0 14px; min-height: 17px; }
 
     .table-wrap {
       margin-top: 16px;
@@ -417,6 +419,31 @@
       .field input { font-size: 16px; }
       .modal-actions { flex-direction: column-reverse; }
       .modal-actions button { width: 100%; }
+
+      /* Scan modal: near full-screen with a large, readable camera preview */
+      #scanOverlay { padding: 0; }
+      .scan-box {
+        max-width: 100%;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        padding: 16px 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .scan-box h2 { font-size: 20px; margin-bottom: 14px; }
+      #scanVideo {
+        height: 65vh;
+        max-height: none;
+      }
+      .scan-status { font-size: 15px; margin: 14px 0 18px; }
+      .scan-box .modal-actions button {
+        max-width: 260px;
+        margin: 0 auto;
+        min-height: 46px;
+        font-size: 15px;
+      }
     }
 
     /* ---- Very small phones ---- */
