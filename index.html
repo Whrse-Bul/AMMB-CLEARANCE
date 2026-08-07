@@ -250,11 +250,39 @@
 
     .table-wrap {
       margin-top: 16px;
+    }
+    .result-group {
       background: var(--white);
       border-radius: 10px;
       border: 1px solid var(--border);
       overflow: hidden;
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      margin-bottom: 16px;
+    }
+    .result-group:last-child { margin-bottom: 0; }
+    .group-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 16px;
+      background: #FBF3E7;
+      border-bottom: 1px solid var(--border);
+    }
+    .group-header .gh-box {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .group-header .gh-box .gh-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--orange-dark);
+      display: block;
+      margin-bottom: 2px;
     }
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
     thead th {
@@ -319,39 +347,36 @@
       thead th, tbody td { padding: 11px 14px; }
     }
 
-    /* ---- Mobile / CP (<=640px): card-style table, bigger everything ---- */
+    /* ---- Mobile / CP (<=640px): card-style table, bigger everything (+10% base) ---- */
     @media (max-width: 640px) {
-      body { padding: 16px 10px 50px; font-size: 15px; }
-      h1 { font-size: 20px; }
-      .sub { font-size: 13.5px; }
+      body { padding: 16px 10px 50px; font-size: 16.5px; }
+      h1 { font-size: 22px; }
+      .sub { font-size: 14.8px; }
       .sticky-controls { margin: 0 -10px; padding-left: 10px; padding-right: 10px; }
       .modal-box { padding: 18px; }
 
       .results-toolbar { flex-direction: column; align-items: stretch; }
-      .status-line { text-align: center; }
+      .status-line { text-align: center; font-size: 14.3px; }
       .toolbar-btns { flex-direction: row; }
-      #copyBtn, #dispatchBtn { flex: 1; padding: 11px 10px; font-size: 14px; min-height: 42px; }
+      #copyBtn, #dispatchBtn { flex: 1; padding: 12px 10px; font-size: 15.4px; min-height: 46px; }
+
+      /* Group header */
+      .group-header { padding: 15px 16px; }
+      .group-header .gh-box { font-size: 17.6px; }
+      .group-header .gh-box .gh-label { font-size: 12px; }
+      .badge { font-size: 12.1px; padding: 3px 9px; }
 
       table, thead, tbody, th, td, tr { display: block; }
       thead { display: none; }
       tbody tr {
         background: var(--white);
         border-bottom: 8px solid var(--cream);
-        border-radius: 8px;
         padding: 14px 14px 10px;
       }
+      tbody tr:last-child { border-bottom: none; }
       tbody tr:hover { background: var(--white); }
 
-      /* Primary info: Box Tracking + Item Name stand out */
-      tbody td[data-label="Box Tracking"] {
-        padding: 0 0 4px;
-        border-bottom: none;
-        display: block;
-        text-align: left;
-      }
-      tbody td[data-label="Box Tracking"]::before { display: none; }
-      tbody td[data-label="Box Tracking"] { font-size: 17px; font-weight: 700; color: var(--ink); }
-
+      /* Primary info: Item Name stands out */
       tbody td[data-label="Item Name"] {
         padding: 0 0 8px;
         border-bottom: 1px solid var(--border);
@@ -359,26 +384,32 @@
         text-align: left;
       }
       tbody td[data-label="Item Name"]::before { display: none; }
-      tbody td[data-label="Item Name"] { font-size: 14.5px; color: var(--muted); margin-bottom: 8px; }
+      tbody td[data-label="Item Name"] { font-size: 18.7px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
 
-      /* Secondary rows: label/value pairs */
+      /* Secondary label/value rows */
       tbody td[data-label="PO Month"],
       tbody td[data-label="Barcode"],
-      tbody td[data-label="Item Status"] {
+      tbody td[data-label="Item Status"],
+      tbody td[data-label="Color"],
+      tbody td[data-label="Size"],
+      tbody td[data-label="Qty"] {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 10px;
-        padding: 4px 0;
+        padding: 6px 0;
         border-bottom: none;
         text-align: right;
-        font-size: 13.5px;
+        font-size: 14.8px;
       }
       tbody td[data-label="PO Month"]::before,
       tbody td[data-label="Barcode"]::before,
-      tbody td[data-label="Item Status"]::before {
+      tbody td[data-label="Item Status"]::before,
+      tbody td[data-label="Color"]::before,
+      tbody td[data-label="Size"]::before,
+      tbody td[data-label="Qty"]::before {
         content: attr(data-label);
-        font-size: 11px;
+        font-size: 12.1px;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.03em;
@@ -387,36 +418,9 @@
         flex-shrink: 0;
       }
 
-      /* Color / Size / Qty grouped into one compact row */
-      .csq-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 8px;
-        padding: 8px 0 4px;
-        margin-top: 4px;
-        border-top: 1px solid var(--border);
-      }
-      .csq-item { text-align: center; flex: 1; }
-      .csq-item .csq-label {
-        font-size: 10.5px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-        color: var(--orange-dark);
-        display: block;
-        margin-bottom: 2px;
-      }
-      .csq-item .csq-value { font-size: 14px; color: var(--ink); font-weight: 600; }
-
-      tbody td[data-label="Source"] {
-        display: flex;
-        justify-content: flex-end;
-        padding: 8px 0 0;
-        border-bottom: none;
-      }
-
       /* Bigger tap targets in modal on small screens */
-      .field input { font-size: 16px; }
+      .field input { font-size: 16.5px; }
+      .field label { font-size: 13.2px; }
       .modal-actions { flex-direction: column-reverse; }
       .modal-actions button { width: 100%; }
 
@@ -432,24 +436,23 @@
         flex-direction: column;
         justify-content: center;
       }
-      .scan-box h2 { font-size: 20px; margin-bottom: 14px; }
+      .scan-box h2 { font-size: 22px; margin-bottom: 14px; }
       #scanVideo {
         height: 65vh;
         max-height: none;
       }
-      .scan-status { font-size: 15px; margin: 14px 0 18px; }
+      .scan-status { font-size: 16.5px; margin: 14px 0 18px; }
       .scan-box .modal-actions button {
         max-width: 260px;
         margin: 0 auto;
         min-height: 46px;
-        font-size: 15px;
+        font-size: 16.5px;
       }
     }
 
     /* ---- Very small phones ---- */
     @media (max-width: 360px) {
-      .csq-row { flex-wrap: wrap; }
-      .csq-item { flex: 1 1 30%; }
+      .group-header .gh-box { font-size: 16px; }
     }
   </style>
 </head>
@@ -706,35 +709,49 @@
       copyBtn.classList.add('visible');
       dispatchBtn.classList.add('visible');
 
-      let rows = '';
+      // Group results by Box Tracking No. + Source, preserving first-seen order
+      const groups = [];
+      const groupIndex = {};
       results.forEach(function (r) {
-        rows += '<tr>' +
-          '<td data-label="Box Tracking">' + escapeHtml(r.boxTracking) + '</td>' +
-          '<td data-label="Item Name">' + escapeHtml(r.itemName) + '</td>' +
-          '<td data-label="PO Month">' + escapeHtml(r.poMonth) + '</td>' +
-          '<td data-label="Barcode">' + (r.barcode ? escapeHtml(r.barcode) : '<span style="color:#B7AD9E">—</span>') + '</td>' +
-          '<td data-label="Item Status">' + escapeHtml(r.itemStatus) + '</td>' +
-          // Color/Size/Qty rendered as a single grouped row on mobile via .csq-row,
-          // but kept as normal cells for desktop table view.
-          '<td data-label="Color" class="csq-cell">' +
-            '<span class="csq-row">' +
-              '<span class="csq-item"><span class="csq-label">Color</span><span class="csq-value">' + escapeHtml(r.color) + '</span></span>' +
-              '<span class="csq-item"><span class="csq-label">Size</span><span class="csq-value">' + escapeHtml(r.size) + '</span></span>' +
-              '<span class="csq-item"><span class="csq-label">Qty</span><span class="csq-value">' + escapeHtml(r.qty) + '</span></span>' +
-            '</span>' +
-          '</td>' +
-          '<td data-label="Source"><span class="badge ' + badgeClass(r.source) + '">' + escapeHtml(r.source) + '</span></td>' +
-          '</tr>';
+        const key = r.boxTracking + '||' + r.source;
+        if (!(key in groupIndex)) {
+          groupIndex[key] = groups.length;
+          groups.push({ boxTracking: r.boxTracking, source: r.source, items: [] });
+        }
+        groups[groupIndex[key]].items.push(r);
       });
 
-      resultsWrap.innerHTML =
-        '<table>' +
-        '<thead><tr>' +
-        '<th>Box Tracking</th><th>Item Name</th><th>PO Month</th><th>Barcode</th><th>Item Status</th>' +
-        '<th>Color / Size / Qty</th><th>Source</th>' +
-        '</tr></thead>' +
-        '<tbody>' + rows + '</tbody>' +
-        '</table>';
+      let html = '';
+      groups.forEach(function (g) {
+        let rows = '';
+        g.items.forEach(function (r) {
+          rows += '<tr>' +
+            '<td data-label="PO Month">' + escapeHtml(r.poMonth) + '</td>' +
+            '<td data-label="Barcode">' + (r.barcode ? escapeHtml(r.barcode) : '<span style="color:#B7AD9E">—</span>') + '</td>' +
+            '<td data-label="Item Name">' + escapeHtml(r.itemName) + '</td>' +
+            '<td data-label="Color">' + escapeHtml(r.color) + '</td>' +
+            '<td data-label="Size">' + escapeHtml(r.size) + '</td>' +
+            '<td data-label="Qty">' + escapeHtml(r.qty) + '</td>' +
+            '<td data-label="Item Status">' + escapeHtml(r.itemStatus) + '</td>' +
+            '</tr>';
+        });
+
+        html +=
+          '<div class="result-group">' +
+            '<div class="group-header">' +
+              '<div class="gh-box"><span class="gh-label">Box Tracking No.</span>' + escapeHtml(g.boxTracking) + '</div>' +
+              '<div><span class="badge ' + badgeClass(g.source) + '">' + escapeHtml(g.source) + '</span></div>' +
+            '</div>' +
+            '<table>' +
+              '<thead><tr>' +
+                '<th>PO Month</th><th>Barcode</th><th>Item Name</th><th>Color</th><th>Size</th><th>Qty</th><th>Item Status</th>' +
+              '</tr></thead>' +
+              '<tbody>' + rows + '</tbody>' +
+            '</table>' +
+          '</div>';
+      });
+
+      resultsWrap.innerHTML = html;
     }
 
     // ---- COPY RESULTS (Barcode, Item Name, Color, Size, Qty only) ----
