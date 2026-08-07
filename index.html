@@ -334,8 +334,8 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ---- Tablet tweak (641px - 1024px): a bit more breathing room ---- */
-    @media (min-width: 641px) and (max-width: 1024px) {
+    /* ---- Tablet tweak (769px - 1024px): a bit more breathing room ---- */
+    @media (min-width: 769px) and (max-width: 1024px) {
       .wrap { max-width: 100%; }
       table { font-size: 13.5px; }
     }
@@ -347,44 +347,44 @@
       thead th, tbody td { padding: 11px 14px; }
     }
 
-    /* ---- Mobile / CP (<=640px): card-style table, bigger everything (+10% base) ---- */
-    @media (max-width: 640px) {
-      body { padding: 16px 10px 50px; font-size: 16.5px; }
-      h1 { font-size: 22px; }
-      .sub { font-size: 14.8px; }
-      .sticky-controls { margin: 0 -10px; padding-left: 10px; padding-right: 10px; }
-      .modal-box { padding: 18px; }
+    /* ---- Mobile / CP (<=768px): card-style table, bigger everything (+~30% total from original) ---- */
+    @media (max-width: 768px) {
+      body { padding: 18px 12px 55px; font-size: 19.8px; }
+      h1 { font-size: 26.4px; }
+      .sub { font-size: 17.8px; }
+      .sticky-controls { margin: 0 -12px; padding-left: 12px; padding-right: 12px; }
+      .modal-box { padding: 20px; }
 
       .results-toolbar { flex-direction: column; align-items: stretch; }
-      .status-line { text-align: center; font-size: 14.3px; }
+      .status-line { text-align: center; font-size: 17.2px; }
       .toolbar-btns { flex-direction: row; }
-      #copyBtn, #dispatchBtn { flex: 1; padding: 12px 10px; font-size: 15.4px; min-height: 46px; }
+      #copyBtn, #dispatchBtn { flex: 1; padding: 14px 10px; font-size: 18.5px; min-height: 52px; }
 
       /* Group header */
-      .group-header { padding: 15px 16px; }
-      .group-header .gh-box { font-size: 17.6px; }
-      .group-header .gh-box .gh-label { font-size: 12px; }
-      .badge { font-size: 12.1px; padding: 3px 9px; }
+      .group-header { padding: 17px 18px; }
+      .group-header .gh-box { font-size: 21.1px; }
+      .group-header .gh-box .gh-label { font-size: 14.4px; }
+      .badge { font-size: 14.5px; padding: 4px 10px; }
 
       table, thead, tbody, th, td, tr { display: block; }
       thead { display: none; }
       tbody tr {
         background: var(--white);
         border-bottom: 8px solid var(--cream);
-        padding: 14px 14px 10px;
+        padding: 16px 16px 12px;
       }
       tbody tr:last-child { border-bottom: none; }
       tbody tr:hover { background: var(--white); }
 
       /* Primary info: Item Name stands out */
       tbody td[data-label="Item Name"] {
-        padding: 0 0 8px;
+        padding: 0 0 10px;
         border-bottom: 1px solid var(--border);
         display: block;
         text-align: left;
       }
       tbody td[data-label="Item Name"]::before { display: none; }
-      tbody td[data-label="Item Name"] { font-size: 18.7px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+      tbody td[data-label="Item Name"] { font-size: 22.4px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
 
       /* Secondary label/value rows */
       tbody td[data-label="PO Month"],
@@ -397,10 +397,10 @@
         justify-content: space-between;
         align-items: center;
         gap: 10px;
-        padding: 6px 0;
+        padding: 7px 0;
         border-bottom: none;
         text-align: right;
-        font-size: 14.8px;
+        font-size: 17.8px;
       }
       tbody td[data-label="PO Month"]::before,
       tbody td[data-label="Barcode"]::before,
@@ -409,7 +409,7 @@
       tbody td[data-label="Size"]::before,
       tbody td[data-label="Qty"]::before {
         content: attr(data-label);
-        font-size: 12.1px;
+        font-size: 14.5px;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.03em;
@@ -419,10 +419,10 @@
       }
 
       /* Bigger tap targets in modal on small screens */
-      .field input { font-size: 16.5px; }
-      .field label { font-size: 13.2px; }
+      .field input { font-size: 19.8px; min-height: 50px; }
+      .field label { font-size: 15.8px; }
       .modal-actions { flex-direction: column-reverse; }
-      .modal-actions button { width: 100%; }
+      .modal-actions button { width: 100%; min-height: 50px; font-size: 17px; }
 
       /* Scan modal: near full-screen with a large, readable camera preview */
       #scanOverlay { padding: 0; }
@@ -436,17 +436,17 @@
         flex-direction: column;
         justify-content: center;
       }
-      .scan-box h2 { font-size: 22px; margin-bottom: 14px; }
+      .scan-box h2 { font-size: 26px; margin-bottom: 14px; }
       #scanVideo {
         height: 65vh;
         max-height: none;
       }
-      .scan-status { font-size: 16.5px; margin: 14px 0 18px; }
+      .scan-status { font-size: 19.8px; margin: 14px 0 18px; }
       .scan-box .modal-actions button {
         max-width: 260px;
         margin: 0 auto;
-        min-height: 46px;
-        font-size: 16.5px;
+        min-height: 50px;
+        font-size: 19.8px;
       }
     }
 
@@ -866,6 +866,26 @@
     function closeDispatchModal() {
       modalOverlay.classList.remove('visible');
     }
+
+    // ---- Live auto-save: Picked By / DR Tracking No. / Dispatch Date ----
+    // Saves as the user types (debounced), so these fields are remembered
+    // on this device even if the form is closed without submitting.
+    let fieldSaveTimer = null;
+    function autoSaveFields() {
+      clearTimeout(fieldSaveTimer);
+      fieldSaveTimer = setTimeout(function () {
+        const existing = loadLastEntry() || {};
+        saveLastEntry({
+          store: existing.store || DEFAULT_STORE,
+          pickedBy: fPickedBy.value,
+          drTrackingNo: fDrTracking.value,
+          dispatchDate: fDispatchDate.value
+        });
+      }, 300);
+    }
+    fPickedBy.addEventListener('input', autoSaveFields);
+    fDrTracking.addEventListener('input', autoSaveFields);
+    fDispatchDate.addEventListener('input', autoSaveFields);
 
     fStore.addEventListener('input', function () {
       clearTimeout(storeSuggestTimer);
