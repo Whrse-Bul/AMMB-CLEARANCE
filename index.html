@@ -454,10 +454,221 @@
     @media (max-width: 360px) {
       .group-header .gh-box { font-size: 16px; }
     }
+
+
+    /* ---- Main module navigation ---- */
+    .main-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 5px;
+      background: #F1E8D8;
+      border-radius: 10px;
+    }
+    .main-nav-btn {
+      flex: 1;
+      border: none;
+      border-radius: 7px;
+      padding: 11px 12px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .main-nav-btn.active {
+      background: var(--white);
+      color: var(--orange-dark);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .app-module { display: none; }
+    .app-module.active { display: block; }
+
+    /* ---- Clearance Monitoring ---- */
+    .clearance-tabs {
+      display: flex;
+      gap: 8px;
+      margin: 14px 0 12px;
+    }
+    .clearance-tab {
+      flex: 1;
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--ink);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .clearance-tab.active[data-source="AGING ITEM"] {
+      background: var(--aging);
+      border-color: var(--aging);
+      color: #fff;
+    }
+    .clearance-tab.active[data-source="DAMAGE CLEARANCE"] {
+      background: var(--damage);
+      border-color: var(--damage);
+      color: #fff;
+    }
+    .clearance-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .clearance-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .summary-chip {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .summary-chip strong { color: var(--ink); }
+    #clearanceRefreshBtn {
+      border: none;
+      border-radius: 7px;
+      padding: 8px 12px;
+      background: #F1E8D8;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .clearance-location {
+      margin-bottom: 18px;
+    }
+    .location-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      padding: 0 2px;
+    }
+    .location-name {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .location-count {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .clearance-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .clearance-box-row {
+      display: grid;
+      grid-template-columns: 34px minmax(170px, 1fr) auto auto;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: #FBF3E7;
+      cursor: pointer;
+    }
+    .box-toggle-icon {
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 7px;
+      background: #F1E8D8;
+      color: var(--orange-dark);
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .clearance-box.expanded .box-toggle-icon { transform: rotate(90deg); }
+    .clearance-box-number .box-label {
+      display: block;
+      font-size: 10px;
+      color: var(--orange-dark);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+    .clearance-box-number strong { font-size: 15px; }
+    .box-stats {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      text-align: right;
+    }
+    .box-dispatch-btn {
+      border: none;
+      border-radius: 7px;
+      padding: 8px 12px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 36px;
+    }
+    .box-dispatch-btn:hover { background: #453F38; }
+    .clearance-details { display: none; }
+    .clearance-box.expanded .clearance-details { display: block; }
+
+    @media (max-width: 768px) {
+      .main-nav { margin-bottom: 16px; }
+      .main-nav-btn { font-size: 16px; min-height: 50px; }
+      .clearance-tabs { flex-direction: column; }
+      .clearance-tab { font-size: 17px; min-height: 50px; }
+      .clearance-toolbar { align-items: stretch; flex-direction: column; }
+      #clearanceRefreshBtn { min-height: 44px; font-size: 15px; }
+      .location-name { font-size: 18px; }
+      .location-count { font-size: 14px; }
+      .clearance-box-row {
+        grid-template-columns: 36px 1fr auto;
+        gap: 8px;
+        padding: 13px 12px;
+      }
+      .clearance-box-number strong { font-size: 18px; }
+      .box-stats {
+        grid-column: 2 / 4;
+        text-align: left;
+        font-size: 14px;
+      }
+      .box-dispatch-btn {
+        grid-column: 3;
+        grid-row: 1;
+        min-height: 42px;
+        font-size: 14px;
+      }
+      .clearance-details table,
+      .clearance-details thead,
+      .clearance-details tbody,
+      .clearance-details th,
+      .clearance-details td,
+      .clearance-details tr { display: block; }
+      .clearance-details thead { display: none; }
+    }
+
   </style>
 </head>
 <body>
   <div class="wrap">
+    <div class="main-nav">
+      <button class="main-nav-btn active" id="navSearchBtn" data-module="searchModule">Box Tracking Search</button>
+      <button class="main-nav-btn" id="navClearanceBtn" data-module="clearanceModule">Clearance Monitoring</button>
+    </div>
+
+    <section class="app-module active" id="searchModule">
     <h1>Box Tracking Search</h1>
     <p class="sub">Searches Aging Item, Damage Clearance, and Not in Masterlist by Box Tracking No.</p>
 
@@ -515,6 +726,31 @@
         <div>Type or scan a box tracking number, then hit Search</div>
       </div>
     </div>
+    </section>
+
+    <section class="app-module" id="clearanceModule">
+      <h1>Clearance Monitoring</h1>
+      <p class="sub">Active clearance boxes grouped by Location and Box Tracking No. Rows marked COMPLETED in Column V are hidden.</p>
+
+      <div class="clearance-tabs">
+        <button class="clearance-tab active" data-source="AGING ITEM">Aging Item</button>
+        <button class="clearance-tab" data-source="DAMAGE CLEARANCE">Damage Clearance</button>
+      </div>
+
+      <div class="clearance-toolbar">
+        <div class="clearance-summary" id="clearanceSummary">
+          <span class="summary-chip">Active Boxes: <strong>0</strong></span>
+          <span class="summary-chip">Active Items: <strong>0</strong></span>
+          <span class="summary-chip">Locations: <strong>0</strong></span>
+        </div>
+        <button id="clearanceRefreshBtn">Refresh</button>
+      </div>
+
+      <div id="clearanceStatus" class="status-line"></div>
+      <div class="table-wrap" id="clearanceContent">
+        <div class="idle-state">Open Clearance Monitoring to load active boxes.</div>
+      </div>
+    </section>
   </div>
 
   <div class="modal-overlay" id="modalOverlay">
@@ -592,6 +828,16 @@
     const copyBtnLabel = document.getElementById('copyBtnLabel');
     const dispatchBtn = document.getElementById('dispatchBtn');
 
+    const navSearchBtn = document.getElementById('navSearchBtn');
+    const navClearanceBtn = document.getElementById('navClearanceBtn');
+    const searchModule = document.getElementById('searchModule');
+    const clearanceModule = document.getElementById('clearanceModule');
+    const clearanceTabs = Array.from(document.querySelectorAll('.clearance-tab'));
+    const clearanceSummary = document.getElementById('clearanceSummary');
+    const clearanceStatus = document.getElementById('clearanceStatus');
+    const clearanceContent = document.getElementById('clearanceContent');
+    const clearanceRefreshBtn = document.getElementById('clearanceRefreshBtn');
+
     const DEFAULT_STORE = 'Ayala Malls Manila Bay';
     const LAST_ENTRY_KEY = 'boxTrackingApp_lastDispatchEntry';
 
@@ -622,6 +868,163 @@
 
     let requestSeq = 0;
     let lastResults = [];
+    let dispatchItems = [];
+    let activeClearanceSource = 'AGING ITEM';
+    let clearanceLoaded = false;
+    let clearanceBoxMap = {};
+
+    // ---- MAIN MODULE NAVIGATION + CLEARANCE ----
+    function showModule(moduleId) {
+      searchModule.classList.toggle('active', moduleId === 'searchModule');
+      clearanceModule.classList.toggle('active', moduleId === 'clearanceModule');
+      navSearchBtn.classList.toggle('active', moduleId === 'searchModule');
+      navClearanceBtn.classList.toggle('active', moduleId === 'clearanceModule');
+
+      if (moduleId === 'clearanceModule' && !clearanceLoaded) {
+        loadClearanceData(activeClearanceSource);
+      }
+    }
+
+    navSearchBtn.addEventListener('click', function () { showModule('searchModule'); });
+    navClearanceBtn.addEventListener('click', function () { showModule('clearanceModule'); });
+
+    clearanceTabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        activeClearanceSource = tab.dataset.source;
+        clearanceTabs.forEach(function (t) { t.classList.toggle('active', t === tab); });
+        loadClearanceData(activeClearanceSource);
+      });
+    });
+
+    clearanceRefreshBtn.addEventListener('click', function () {
+      loadClearanceData(activeClearanceSource);
+    });
+
+    function loadClearanceData(source) {
+      clearanceLoaded = true;
+      clearanceStatus.innerHTML = '<span class="loader"></span>Loading ' + escapeHtml(source) + '...';
+      clearanceContent.innerHTML = '';
+
+      fetch(`${GAS_URL}?action=getClearanceData&source=${encodeURIComponent(source)}`)
+        .then(r => r.json())
+        .then(function (rows) {
+          if (rows && rows.error) throw new Error(rows.error);
+          renderClearance(rows || [], source);
+        })
+        .catch(function (err) {
+          clearanceStatus.textContent = 'Error: ' + err.message;
+          clearanceContent.innerHTML = '<div class="empty-state">Unable to load clearance records.</div>';
+          updateClearanceSummary(0, 0, 0);
+        });
+    }
+
+    function updateClearanceSummary(boxes, items, locations) {
+      clearanceSummary.innerHTML =
+        '<span class="summary-chip">Active Boxes: <strong>' + boxes + '</strong></span>' +
+        '<span class="summary-chip">Active Items: <strong>' + items + '</strong></span>' +
+        '<span class="summary-chip">Locations: <strong>' + locations + '</strong></span>';
+    }
+
+    function renderClearance(rows, source) {
+      clearanceBoxMap = {};
+
+      if (!rows.length) {
+        clearanceStatus.textContent = 'No active ' + source.toLowerCase() + ' records.';
+        clearanceContent.innerHTML = '<div class="empty-state">No active boxes found. Rows marked COMPLETED in Column V are hidden.</div>';
+        updateClearanceSummary(0, 0, 0);
+        return;
+      }
+
+      const locations = {};
+      rows.forEach(function (row) {
+        const loc = row.location || 'UNASSIGNED LOCATION';
+        if (!locations[loc]) locations[loc] = {};
+        if (!locations[loc][row.boxTracking]) locations[loc][row.boxTracking] = [];
+        locations[loc][row.boxTracking].push(row);
+      });
+
+      const locationNames = Object.keys(locations).sort(function (a, b) {
+        return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+      });
+
+      let totalBoxes = 0;
+      let html = '';
+      let keySeq = 0;
+
+      locationNames.forEach(function (location) {
+        const boxes = locations[location];
+        const boxNumbers = Object.keys(boxes).sort(function (a, b) {
+          return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+        });
+        totalBoxes += boxNumbers.length;
+
+        html += '<div class="clearance-location">' +
+          '<div class="location-header">' +
+            '<div class="location-name">' + escapeHtml(location) + '</div>' +
+            '<div class="location-count">' + boxNumbers.length + ' box' + (boxNumbers.length === 1 ? '' : 'es') + '</div>' +
+          '</div>';
+
+        boxNumbers.forEach(function (boxNo) {
+          const items = boxes[boxNo];
+          const boxKey = 'cb' + (++keySeq);
+          clearanceBoxMap[boxKey] = items;
+          const totalQty = items.reduce(function (sum, item) {
+            const n = Number(item.qty);
+            return sum + (isNaN(n) ? 0 : n);
+          }, 0);
+
+          let detailRows = '';
+          items.forEach(function (r) {
+            detailRows += '<tr>' +
+              '<td data-label="PO Month">' + escapeHtml(r.poMonth) + '</td>' +
+              '<td data-label="Barcode">' + (r.barcode ? escapeHtml(r.barcode) : '<span style="color:#B7AD9E">—</span>') + '</td>' +
+              '<td data-label="Item Name">' + escapeHtml(r.itemName) + '</td>' +
+              '<td data-label="Color">' + escapeHtml(r.color) + '</td>' +
+              '<td data-label="Size">' + escapeHtml(r.size) + '</td>' +
+              '<td data-label="Qty">' + escapeHtml(r.qty) + '</td>' +
+              '<td data-label="Item Status">' + escapeHtml(r.itemStatus) + '</td>' +
+              '</tr>';
+          });
+
+          html += '<div class="clearance-box" id="' + boxKey + '">' +
+            '<div class="clearance-box-row" data-toggle-box="' + boxKey + '">' +
+              '<button class="box-toggle-icon" type="button" aria-label="Expand box">›</button>' +
+              '<div class="clearance-box-number"><span class="box-label">Box Tracking No.</span><strong>' + escapeHtml(boxNo) + '</strong></div>' +
+              '<div class="box-stats">' + items.length + ' item' + (items.length === 1 ? '' : 's') + ' / Qty ' + totalQty + '</div>' +
+              '<button class="box-dispatch-btn" type="button" data-dispatch-box="' + boxKey + '">Dispatch</button>' +
+            '</div>' +
+            '<div class="clearance-details">' +
+              '<table>' +
+                '<thead><tr><th>PO Month</th><th>Barcode</th><th>Item Name</th><th>Color</th><th>Size</th><th>Qty</th><th>Item Status</th></tr></thead>' +
+                '<tbody>' + detailRows + '</tbody>' +
+              '</table>' +
+            '</div>' +
+          '</div>';
+        });
+
+        html += '</div>';
+      });
+
+      clearanceStatus.textContent = rows.length + ' active item row' + (rows.length === 1 ? '' : 's') + ' in ' + source;
+      updateClearanceSummary(totalBoxes, rows.length, locationNames.length);
+      clearanceContent.innerHTML = html;
+    }
+
+    clearanceContent.addEventListener('click', function (e) {
+      const dispatchButton = e.target.closest('[data-dispatch-box]');
+      if (dispatchButton) {
+        e.stopPropagation();
+        const key = dispatchButton.dataset.dispatchBox;
+        openDispatchModal(clearanceBoxMap[key] || []);
+        return;
+      }
+
+      const row = e.target.closest('[data-toggle-box]');
+      if (row) {
+        const box = document.getElementById(row.dataset.toggleBox);
+        if (box) box.classList.toggle('expanded');
+      }
+    });
 
     // ---- Feature-detect scan support (typically absent on PC/laptops) ----
     (function initScanAvailability() {
@@ -796,7 +1199,7 @@
     }
 
     // ---- DISPATCH MODAL ----
-    dispatchBtn.addEventListener('click', openDispatchModal);
+    dispatchBtn.addEventListener('click', function () { openDispatchModal(lastResults); });
     modalCancelBtn.addEventListener('click', closeDispatchModal);
     modalDoneBtn.addEventListener('click', closeDispatchModal);
     modalOverlay.addEventListener('click', function (e) {
@@ -820,8 +1223,9 @@
       }
     }
 
-    function openDispatchModal() {
-      if (!lastResults.length) return;
+    function openDispatchModal(itemsToDispatch) {
+      dispatchItems = Array.isArray(itemsToDispatch) ? itemsToDispatch.slice() : [];
+      if (!dispatchItems.length) return;
 
       modalError.classList.remove('visible');
       modalFormView.style.display = 'block';
@@ -829,8 +1233,8 @@
       modalSubmitBtn.disabled = false;
       modalSubmitBtn.textContent = 'Submit';
 
-      modalItemCount.textContent = 'Sending ' + lastResults.length +
-        ' item' + (lastResults.length === 1 ? '' : 's') + ' to the FULFILLMENT tab.';
+      modalItemCount.textContent = 'Sending ' + dispatchItems.length +
+        ' item' + (dispatchItems.length === 1 ? '' : 's') + ' to the FULFILLMENT tab.';
 
       drHint.textContent = '';
       dateHint.textContent = '';
@@ -914,7 +1318,7 @@
       }
       modalError.classList.remove('visible');
 
-      const items = lastResults.map(function (r) {
+      const items = dispatchItems.map(function (r) {
         return {
           boxTracking: r.boxTracking,
           barcode: r.barcode,
